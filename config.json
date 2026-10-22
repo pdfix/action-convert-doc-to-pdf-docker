@@ -1,0 +1,71 @@
+{
+    "name": "Convert to PDF",
+    "version": "v0.0.0",
+    "actions": [
+        {
+            "title": "Convert Word to PDF",
+            "name": "pdfix_convert_doc_to_pdf_libreoffice",
+            "desc": "Converts Word document (DOC, DOCX) or other word processing document to PDF/UA using LibreOffice [Local]",
+            "version": "v0.0.0",
+            "icon": "doc_to_pdf",
+            "category": "Conversion",
+            "local": true,
+            "docker": {
+                "name": "pdfix/convert-doc-to-pdf",
+                "tag": "latest"
+            },
+            "program": "docker run --platform linux/amd64 -v ${working_directory}:/data -w /data --rm pdfix/convert-doc-to-pdf:latest doc-to-pdf -i \"/data/${input_doc}\" -o \"/data/${output_pdf}\" --standard \"${standard}\"",
+            "args": [
+                {
+                    "name": "input_doc",
+                    "desc": "Input Word document",
+                    "flags": 2,
+                    "type": "file_path",
+                    "ext": "docx",
+                    "value": ""
+                },
+                {
+                    "name": "output_pdf",
+                    "desc": "Output PDF file",
+                    "flags": 4,
+                    "type": "file_path",
+                    "ext": "pdf",
+                    "value": ""
+                },
+                {
+                    "title": "PDF standard",
+                    "name": "standard",
+                    "desc": "Accessibility (and archiving) standard of the output PDF",
+                    "type": "string",
+                    "value": "ua1",
+                    "set": [
+                        {
+                            "desc": "PDF/UA-1 (PDF 1.7)",
+                            "value": "ua1"
+                        },
+                        {
+                            "desc": "PDF/UA-2 (PDF 2.0)",
+                            "value": "ua2"
+                        },
+                        {
+                            "desc": "PDF/UA-1 and PDF/A-2b",
+                            "value": "ua1-a2b"
+                        },
+                        {
+                            "desc": "PDF/UA-2 and PDF/A-4",
+                            "value": "ua2-a4"
+                        }
+                    ]
+                }
+            ],
+            "errors": {
+                "10": "Failed to parse arguments. Please check the usage and try again.",
+                "30": "Failed to find input document.",
+                "31": "Failed to convert document to PDF.",
+                "32": "Failed to open input document. The document is damaged, password protected or in unsupported format.",
+                "33": "Failed to save output PDF. Make sure the output directory exists and is writable."
+            },
+            "progress_regex": "^(?<text>[^:]+):\\s+(?<progress>\\d{1,3})%"
+        }
+    ]
+}
