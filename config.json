@@ -3,7 +3,7 @@
     "version": "v0.0.0",
     "actions": [
         {
-            "title": "Convert Word to PDF",
+            "title": "Convert Word to PDF (LibreOffice)",
             "name": "pdfix_convert_doc_to_pdf_libreoffice",
             "desc": "Converts Word document (DOC, DOCX) or other word processing document to PDF/UA using LibreOffice [Local]",
             "version": "v0.0.0",
@@ -14,7 +14,7 @@
                 "name": "pdfix/convert-doc-to-pdf",
                 "tag": "latest"
             },
-            "program": "docker run --platform linux/amd64 -v ${working_directory}:/data -w /data --rm pdfix/convert-doc-to-pdf:latest doc-to-pdf -i \"/data/${input_doc}\" -o \"/data/${output_pdf}\" --standard \"${standard}\"",
+            "program": "docker run -v ${working_directory}:/data -w /data --rm pdfix/convert-doc-to-pdf:latest doc-to-pdf -i \"/data/${input_doc}\" -o \"/data/${output_pdf}\" --standard \"${standard}\"",
             "args": [
                 {
                     "name": "input_doc",
