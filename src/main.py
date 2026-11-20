@@ -80,6 +80,16 @@ def run_doc_to_pdf_subcommand(args) -> None:
     doc_to_pdf(args.input, args.output, args.standard)
 
 
+# @KA:action pdfix_convert_doc_to_pdf_libreoffice
+# @KA:desc Converts a Word document to an accessible PDF (PDF/UA) using LibreOffice. The PDF is
+# tagged from the structure of the document: heading styles, lists, tables, images with alternative
+# text, hyperlinks and the document title. The input file is not changed, the PDF is saved as the
+# output file.
+# @KA:context Run when you have the source Word document and need an accessible PDF from it.
+# The result is only as accessible as the document: set the document title, use heading styles,
+# add alternative text to images and a ScreenTip to hyperlinks before converting. Runs locally in
+# Docker, nothing leaves your computer and no PDFix license is needed; the first run downloads the
+# image and takes longer.
 def doc_to_pdf(input_path: str, output_path: str, standard: str) -> None:
     """
     Converts word processing document to PDF document.
@@ -89,6 +99,13 @@ def doc_to_pdf(input_path: str, output_path: str, standard: str) -> None:
         output_path (str): Path to output PDF document.
         standard (str): PDF standard of the output.
     """
+    # @KA:param output_pdf
+    # @KA:desc Where the PDF is saved. It must have the `.pdf` extension and the folder must already
+    # exist; an existing file with the same name is overwritten.
+    # @KA:problem "Output file must be PDF document." (error 11)
+    # @KA:solution Use an output file name with the `.pdf` extension.
+    # @KA:problem "Output folder does not exist." (error 12)
+    # @KA:solution Create the folder shown in the message or select another output file.
     if not output_path.lower().endswith(".pdf"):
         raise ArgumentOutputPdfException()
 
