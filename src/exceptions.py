@@ -1,4 +1,5 @@
 EC_ARG_GENERAL: int = 10
+EC_ARG_OUTPUT_PDF: int = 11
 
 EC_FAILED_TO_FIND_INPUT: int = 30
 EC_LIBREOFFICE_FAILED_TO_CONVERT: int = 31
@@ -6,6 +7,7 @@ EC_LIBREOFFICE_FAILED_TO_LOAD_INPUT: int = 32
 EC_FAILED_TO_SAVE_OUTPUT: int = 33
 
 MESSAGE_ARG_GENERAL: str = "Failed to parse arguments. Please check the usage and try again."
+MESSAGE_ARG_OUTPUT_PDF: str = "Output file must be PDF document."
 
 MESSAGE_FAILED_TO_FIND_INPUT: str = "Failed to find input document."
 MESSAGE_LIBREOFFICE_FAILED_TO_CONVERT: str = "Failed to convert document to PDF."
@@ -47,6 +49,15 @@ class ArgGeneralException(ExpectedException):
         """Initialize with the argument parsing error code and message."""
         super().__init__(EC_ARG_GENERAL)
         self._add_note(MESSAGE_ARG_GENERAL)
+
+
+class ArgumentOutputPdfException(ExpectedException):
+    """Raised when the output file is not a PDF document."""
+
+    def __init__(self) -> None:
+        """Initialize with the output extension error code and message."""
+        super().__init__(EC_ARG_OUTPUT_PDF)
+        self._add_note(MESSAGE_ARG_OUTPUT_PDF)
 
 
 class FailedToFindInputException(ExpectedException):

@@ -60,6 +60,7 @@
             ],
             "errors": {
                 "10": "Failed to parse arguments. Please check the usage and try again.",
+                "11": "Output file must be PDF document.",
                 "30": "Failed to find input document.",
                 "31": "Failed to convert document to PDF.",
                 "32": "Failed to open input document. The document is damaged, password protected or in unsupported format.",
