@@ -14,7 +14,7 @@
                 "name": "pdfix/convert-doc-to-pdf",
                 "tag": "latest"
             },
-            "program": "docker run -v ${working_directory}:/data -w /data --rm pdfix/convert-doc-to-pdf:latest doc-to-pdf -i \"/data/${input_doc}\" -o \"/data/${output_pdf}\" --standard \"${standard}\"",
+            "program": "docker run -v \"${working_directory}:/data\" -w /data --rm pdfix/convert-doc-to-pdf:latest doc-to-pdf -i \"/data/${input_doc}\" -o \"/data/${output_pdf}\" --standard \"${standard}\"",
             "args": [
                 {
                     "name": "input_doc",
