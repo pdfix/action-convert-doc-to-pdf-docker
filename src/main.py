@@ -6,7 +6,13 @@ from pathlib import Path
 
 from constants import CONFIG_FILE, DEFAULT_PDF_STANDARD, PDF_STANDARDS
 from doc_to_pdf import convert_to_pdf
-from exceptions import EC_ARG_GENERAL, MESSAGE_ARG_GENERAL, ArgumentOutputPdfException, ExpectedException
+from exceptions import (
+    EC_ARG_GENERAL,
+    MESSAGE_ARG_GENERAL,
+    ArgumentOutputFolderNotExistsException,
+    ArgumentOutputPdfException,
+    ExpectedException,
+)
 from image_update import DockerImageContainerUpdateChecker
 
 
@@ -80,6 +86,10 @@ def doc_to_pdf(input_path: str, output_path: str, standard: str) -> None:
     """
     if not output_path.lower().endswith(".pdf"):
         raise ArgumentOutputPdfException()
+
+    output_folder: Path = Path(output_path).resolve().parent
+    if not output_folder.is_dir():
+        raise ArgumentOutputFolderNotExistsException(output_folder.as_posix())
 
     convert_to_pdf(input_path, output_path, standard)
 
