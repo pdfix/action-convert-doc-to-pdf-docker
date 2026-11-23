@@ -90,6 +90,53 @@ def run_doc_to_pdf_subcommand(args) -> None:
 # add alternative text to images and a ScreenTip to hyperlinks before converting. Runs locally in
 # Docker, nothing leaves your computer and no PDFix license is needed; the first run downloads the
 # image and takes longer.
+# @KA:param input_doc
+# @KA:desc Word document to convert. PDFix Desktop offers DOCX files. Only word processing
+# documents are supported; spreadsheets, presentations and PDFs are not. Password-protected
+# documents are not supported.
+# @KA:problem "Failed to find input document." (error 30)
+# @KA:solution The input file does not exist. Check the path.
+# @KA:problem "Failed to open input document." (error 32)
+# @KA:solution The document is damaged, password-protected or not a word processing document.
+# Open it in Word, remove the password or save it again as DOCX, and run the action again.
+# @KA:param output_pdf
+# @KA:desc Where the PDF is saved. It must have the `.pdf` extension and the folder must already
+# exist; an existing file with the same name is overwritten.
+# @KA:problem "Output file must be PDF document." (error 11)
+# @KA:solution Use an output file name with the `.pdf` extension.
+# @KA:problem "Output folder does not exist." (error 12)
+# @KA:solution Create the folder shown in the message or select another output file.
+# @KA:param standard
+# @KA:desc Standard of the output PDF. **PDF/UA-1** (default) gives the most reliable result.
+# **PDF/UA-2** creates PDF 2.0; LibreOffice support for it is new and some PDF/UA-2 rules may
+# still fail validation. The PDF/A variants also make the PDF suitable for archiving (PDF/A-2b
+# with PDF/UA-1, PDF/A-4 with PDF/UA-2).
+# @KA:problem The PDF/UA-2 output fails some PDF/UA-2 validation rules.
+# @KA:solution Convert with **PDF/UA-1** if PDF/UA-2 is not required, or fix the reported
+# problems in the PDF with PDFix actions.
+# @KA:logic Conversion
+# @KA:desc LibreOffice opens the document and exports it as a tagged PDF with PDF/UA
+# compliance switched on. Tags come from the document: heading styles become headings,
+# lists, tables and images become list, table and figure tags, image alternative text
+# and hyperlink ScreenTips are kept, and the document title is used as the PDF title.
+# Problems in the document (no title, images without alternative text, text formatted to
+# look like headings without heading styles) stay in the PDF.
+# @KA:problem PDF/UA validation reports missing title, alternative text or link description.
+# @KA:solution Fix it in the Word document and convert again, or fix the PDF with PDFix
+# actions.
+# @KA:logic Fonts
+# @KA:desc Microsoft fonts are not included. Calibri, Cambria, Arial, Times New Roman and
+# Courier New are replaced by fonts with the same character widths (Carlito, Caladea,
+# Liberation), so the page layout is kept but the font names in the PDF differ. Other
+# missing fonts are replaced by DejaVu fonts, which can change the layout.
+# @KA:logic Conversion failed
+# @KA:desc When LibreOffice cannot convert the document, the action stops and no PDF is
+# created. The log shows the LibreOffice output.
+# @KA:problem "Failed to convert document to PDF." (error 31)
+# @KA:solution Open the document in Word, save it again as DOCX and run the action again.
+# @KA:problem "Failed to save output PDF." (error 33)
+# @KA:solution The output file cannot be written, for example it is open in another
+# application or the folder is read-only. Close the file or select another output file.
 def doc_to_pdf(input_path: str, output_path: str, standard: str) -> None:
     """
     Converts word processing document to PDF document.
@@ -99,13 +146,6 @@ def doc_to_pdf(input_path: str, output_path: str, standard: str) -> None:
         output_path (str): Path to output PDF document.
         standard (str): PDF standard of the output.
     """
-    # @KA:param output_pdf
-    # @KA:desc Where the PDF is saved. It must have the `.pdf` extension and the folder must already
-    # exist; an existing file with the same name is overwritten.
-    # @KA:problem "Output file must be PDF document." (error 11)
-    # @KA:solution Use an output file name with the `.pdf` extension.
-    # @KA:problem "Output folder does not exist." (error 12)
-    # @KA:solution Create the folder shown in the message or select another output file.
     if not output_path.lower().endswith(".pdf"):
         raise ArgumentOutputPdfException()
 
