@@ -18,7 +18,7 @@ from exceptions import (
 from image_update import DockerImageContainerUpdateChecker
 from logger import get_logger
 
-logger: logging.Logger = get_logger(__name__)
+logger: logging.Logger = get_logger("app_logger")
 
 
 def set_arguments(

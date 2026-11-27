@@ -16,7 +16,7 @@ from exceptions import (
 )
 from logger import get_logger
 
-logger: logging.Logger = get_logger(__name__)
+logger: logging.Logger = get_logger("app_logger")
 
 
 def build_filter_options(standard: str) -> str:
