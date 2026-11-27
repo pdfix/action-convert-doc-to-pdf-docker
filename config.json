@@ -62,10 +62,10 @@
                 "10": "Failed to parse arguments. Please check the usage and try again.",
                 "11": "Output file must be PDF document.",
                 "12": "Output folder does not exist.",
-                "30": "Failed to find input document.",
-                "31": "Failed to convert document to PDF.",
-                "32": "Failed to open input document. The document is damaged, password protected or in unsupported format.",
-                "33": "Failed to save output PDF. Make sure the output directory exists and is writable."
+                "13": "Input file does not exist.",
+                "30": "Failed to convert document to PDF.",
+                "31": "Failed to open input document. The document is damaged, password protected or in unsupported format.",
+                "32": "Failed to save PDF document."
             },
             "progress_regex": "^(?<text>[^:]+):\\s+(?<progress>\\d{1,3})%"
         }

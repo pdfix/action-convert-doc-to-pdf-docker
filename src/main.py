@@ -11,6 +11,7 @@ from doc_to_pdf import convert_to_pdf
 from exceptions import (
     EC_ARG_GENERAL,
     MESSAGE_ARG_GENERAL,
+    ArgumentInputNotExistsException,
     ArgumentOutputFolderNotExistsException,
     ArgumentOutputPdfException,
     ExpectedException,
@@ -94,9 +95,9 @@ def run_doc_to_pdf_subcommand(args) -> None:
 # @KA:desc Word document to convert. PDFix Desktop offers DOCX files. Only word processing
 # documents are supported; spreadsheets, presentations and PDFs are not. Password-protected
 # documents are not supported.
-# @KA:problem "Failed to find input document." (error 30)
-# @KA:solution The input file does not exist. Check the path.
-# @KA:problem "Failed to open input document." (error 32)
+# @KA:problem "Input file does not exist." (error 13)
+# @KA:solution The file shown in the message was not found. Select an existing document.
+# @KA:problem "Failed to open input document." (error 31)
 # @KA:solution The document is damaged, password-protected or not a word processing document.
 # Open it in Word, remove the password or save it again as DOCX, and run the action again.
 # @KA:param output_pdf
@@ -132,9 +133,9 @@ def run_doc_to_pdf_subcommand(args) -> None:
 # @KA:logic Conversion failed
 # @KA:desc When LibreOffice cannot convert the document, the action stops and no PDF is
 # created. The log shows the LibreOffice output.
-# @KA:problem "Failed to convert document to PDF." (error 31)
+# @KA:problem "Failed to convert document to PDF." (error 30)
 # @KA:solution Open the document in Word, save it again as DOCX and run the action again.
-# @KA:problem "Failed to save output PDF." (error 33)
+# @KA:problem "Failed to save PDF document." (error 32)
 # @KA:solution The output file cannot be written, for example it is open in another
 # application or the folder is read-only. Close the file or select another output file.
 def doc_to_pdf(input_path: str, output_path: str, standard: str) -> None:
@@ -152,6 +153,10 @@ def doc_to_pdf(input_path: str, output_path: str, standard: str) -> None:
     output_folder: Path = Path(output_path).resolve().parent
     if not output_folder.is_dir():
         raise ArgumentOutputFolderNotExistsException(output_folder.as_posix())
+
+    input_file: Path = Path(input_path).resolve()
+    if not input_file.is_file():
+        raise ArgumentInputNotExistsException(input_file.as_posix())
 
     convert_to_pdf(input_path, output_path, standard)
 

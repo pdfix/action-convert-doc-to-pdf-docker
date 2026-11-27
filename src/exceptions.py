@@ -1,22 +1,22 @@
 EC_ARG_GENERAL: int = 10
 EC_ARG_OUTPUT_PDF: int = 11
 EC_ARG_OUTPUT_FOLDER_NOT_EXISTS: int = 12
+EC_ARG_INPUT_NOT_EXISTS: int = 13
 
-EC_FAILED_TO_FIND_INPUT: int = 30
-EC_LIBREOFFICE_FAILED_TO_CONVERT: int = 31
-EC_LIBREOFFICE_FAILED_TO_LOAD_INPUT: int = 32
-EC_FAILED_TO_SAVE_OUTPUT: int = 33
+EC_LIBREOFFICE_FAILED_TO_CONVERT: int = 30
+EC_LIBREOFFICE_FAILED_TO_LOAD_INPUT: int = 31
+EC_FAILED_TO_SAVE_OUTPUT: int = 32
 
 MESSAGE_ARG_GENERAL: str = "Failed to parse arguments. Please check the usage and try again."
 MESSAGE_ARG_OUTPUT_PDF: str = "Output file must be PDF document."
 MESSAGE_ARG_OUTPUT_FOLDER_NOT_EXISTS: str = "Output folder does not exist."
+MESSAGE_ARG_INPUT_NOT_EXISTS: str = "Input file does not exist."
 
-MESSAGE_FAILED_TO_FIND_INPUT: str = "Failed to find input document."
 MESSAGE_LIBREOFFICE_FAILED_TO_CONVERT: str = "Failed to convert document to PDF."
 MESSAGE_LIBREOFFICE_FAILED_TO_LOAD_INPUT: str = (
     "Failed to open input document. The document is damaged, password protected or in unsupported format."
 )
-MESSAGE_FAILED_TO_SAVE_OUTPUT: str = "Failed to save output PDF. Make sure the output directory exists and is writable."
+MESSAGE_FAILED_TO_SAVE_OUTPUT: str = "Failed to save PDF document."
 
 
 class ExpectedException(BaseException):
@@ -74,13 +74,16 @@ class ArgumentOutputFolderNotExistsException(ExpectedException):
         self._add_note(f"{MESSAGE_ARG_OUTPUT_FOLDER_NOT_EXISTS} {path}")
 
 
-class FailedToFindInputException(ExpectedException):
+class ArgumentInputNotExistsException(ExpectedException):
     """Raised when the input document does not exist."""
 
-    def __init__(self) -> None:
-        """Initialize with the missing input error code and message."""
-        super().__init__(EC_FAILED_TO_FIND_INPUT)
-        self._add_note(MESSAGE_FAILED_TO_FIND_INPUT)
+    def __init__(self, path: str) -> None:
+        """
+        Args:
+            path (str): Missing input document.
+        """
+        super().__init__(EC_ARG_INPUT_NOT_EXISTS)
+        self._add_note(f"{MESSAGE_ARG_INPUT_NOT_EXISTS} {path}")
 
 
 class FailedToConvertException(ExpectedException):

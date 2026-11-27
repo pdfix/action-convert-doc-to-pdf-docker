@@ -10,7 +10,6 @@ from tqdm import tqdm
 from constants import LIBREOFFICE_EXECUTABLE_PATH, PDF_STANDARDS
 from exceptions import (
     FailedToConvertException,
-    FailedToFindInputException,
     FailedToLoadInputException,
     FailedToSaveOutputException,
 )
@@ -74,15 +73,11 @@ def convert_to_pdf(input: str, output: str, standard: str) -> None:
         standard (str): One of the keys of PDF_STANDARDS.
 
     Raises:
-        FailedToFindInputException: If the input document does not exist.
         FailedToLoadInputException: If LibreOffice cannot open the input document.
         FailedToConvertException: If LibreOffice fails for another reason.
         FailedToSaveOutputException: If the PDF cannot be saved to the output path.
     """
     input_path: Path = Path(input).resolve()
-    if not input_path.is_file():
-        logger.error(f"Input document '{input_path.as_posix()}' was not found.")
-        raise FailedToFindInputException()
 
     output_path: Path = Path(output).resolve()
 
