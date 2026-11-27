@@ -9,6 +9,8 @@ A Docker image that converts Word documents (DOC, DOCX) and other word processin
   - [Usage](#usage)
   - [Commands](#commands)
   - [Arguments](#arguments)
+  - [How it works](#how-it-works)
+  - [Exit codes](#exit-codes)
   - [Examples](#examples)
   - [Notes](#notes)
   - [Help \& support](#help--support)
@@ -39,6 +41,27 @@ docker run --rm -v "$(pwd)":/data -w /data pdfix/convert-doc-to-pdf:latest <comm
 | `--input`, `-i` | yes | Path to an existing `.docx`, `.doc`, `.odt`, `.rtf`, ... file | Input document |
 | `--output`, `-o` | yes | Path for the output `.pdf` file in an existing directory | Output PDF |
 | `--standard` | no | One of: `ua1` (PDF/UA-1), `ua2` (PDF/UA-2), `ua1-a2b` (PDF/UA-1 and PDF/A-2b), `ua2-a4` (PDF/UA-2 and PDF/A-4) (default: `ua1`) | Standard of the output PDF |
+
+## How it works
+
+- LibreOffice Writer (headless) converts DOC, DOCX, ODT or RTF into a tagged PDF with PDF/UA (`ua1`, `ua2`) or PDF/A + PDF/UA, depending on `--standard`.
+- Tags come from the document: heading styles, lists, tables, image alternative text, hyperlink ScreenTips and the document title.
+- Microsoft fonts are not in the image; metric-compatible replacements (Carlito, Caladea, Liberation) keep the layout.
+- **Checks before processing:** output extension (11) and folder (12), input (13), then the conversion.
+
+## Exit codes
+
+| Code | Meaning |
+|---|---|
+| 0 | Success |
+| 1 | Unexpected error (`Failed to run the program:` + traceback) |
+| 10 | Failed to parse arguments. Please check the usage and try again |
+| 11 | Output file must be PDF document |
+| 12 | Output folder does not exist |
+| 13 | Input file does not exist |
+| 30 | Failed to convert document to PDF |
+| 31 | Failed to open input document. The document is damaged, password protected or in unsupported format |
+| 32 | Failed to save PDF document |
 
 ## Examples
 
